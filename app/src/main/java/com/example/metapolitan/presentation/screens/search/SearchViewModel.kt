@@ -1,41 +1,26 @@
-package com.example.metapolitan.presentation.screens.home
+package com.example.metapolitan.presentation.screens.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.metapolitan.data.local.Movie
+import com.example.metapolitan.presentation.screens.home.HomeEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class SearchViewModel @Inject constructor() : ViewModel() {
 
     private val _events = MutableSharedFlow<HomeEvents>()
     val events = _events.asSharedFlow()
 
-    val chips = listOf("Popular", "Top Rated", "Upcoming")
-
-    private val _selectedChip = MutableStateFlow("Popular")
-    val selectedChip: StateFlow<String> = _selectedChip
 
     private val _items = MutableStateFlow<List<Movie>>(emptyList())
     val items: StateFlow<List<Movie>> = _items
-
-    private val _isSearchBarVisible = MutableStateFlow(false)
-    val isSearchBarVisible: StateFlow<Boolean> = _isSearchBarVisible
-
-    fun toggleSearchBar() {
-        _isSearchBarVisible.value = !_isSearchBarVisible.value
-    }
 
     init {
         fetchItems()
@@ -104,15 +89,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun onSearchClicked() = viewModelScope.launch {
-        _events.emit(HomeEvents.avigateToSearchScreen)
-    }
-
     fun onMovieClicked() = viewModelScope.launch {
         _events.emit(HomeEvents.NavigateToMovieDetailsScreen)
-    }
-
-    fun onChipSelected(chip: String) {
-        _selectedChip.value = chip
     }
 }

@@ -1,6 +1,7 @@
 package com.example.metapolitan.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,12 +25,13 @@ import com.example.metapolitan.data.local.Movie
 import com.example.metapolitan.presentation.theme.GunmetalGray
 
 @Composable
-fun MovieCard(movie: Movie) {
+fun MovieCard(movie: Movie, onCardClicked: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onCardClicked() },
         elevation = CardDefaults.elevatedCardElevation(4.dp),
         colors = CardDefaults.cardColors(
             containerColor = GunmetalGray,
@@ -46,7 +48,9 @@ fun MovieCard(movie: Movie) {
                     .fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
                 Text(
                     text = movie.title,
                     style = TextStyle(fontWeight = FontWeight.SemiBold),

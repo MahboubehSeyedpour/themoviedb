@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Metapolitan</string>
+
+    <!--    Home screen      -->
+    <string name="watch_now">Watch Now</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non felis eu metus malesuada eleifend. Nam et nisl tristique, lobortis dui id, fermentum arcu. Vestibulum ultricies a diam ac scelerisque. Ut pretium, nulla vitae faucibus suscipit, purus ligula placerat nulla, non suscipit eros nunc non mi. Donec sollicitudin leo luctus, ultrices ligula eget, consectetur massa. Curabitur dui sem, pretium in bibendum ornare, sodales vel turpis. Nullam nec facilisis libero, at ultrices odio.
+
+Cras eget mi et libero lacinia viverra. Nunc quis odio eget nisl consectetur auctor. Maecenas interdum aliquam diam sit amet cursus. Nulla volutpat quis nulla ac interdum. Cras fermentum lectus id auctor rhoncus. Praesent eu ante faucibus, fermentum quam eu, pulvinar augue. In dignissim diam tellus, ut posuere risus faucibus tincidunt. Sed ex sapien, facilisis in dignissim sed, rutrum vitae nibh. Aliquam augue nisi, ultricies id dapibus quis, laoreet et erat. Proin in mi eros. Fusce elementum augue risus, nec congue sapien volutpat in. Nunc neque mi, vestibulum et gravida sed, pellentesque eu ante.</string>
+
 </resources>

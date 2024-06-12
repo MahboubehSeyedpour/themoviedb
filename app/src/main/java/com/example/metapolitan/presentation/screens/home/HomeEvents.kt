@@ -1,4 +1,6 @@
 package com.example.metapolitan.presentation.screens.home
 
-class HomeEvents {
+sealed class HomeEvents {
+    data object NavigateToMovieDetailsScreen : HomeEvents()
+    data object avigateToSearchScreen : HomeEvents()
 }

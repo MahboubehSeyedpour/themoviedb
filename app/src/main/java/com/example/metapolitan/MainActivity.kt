@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -20,6 +23,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.metapolitan.presentation.navigations.Screens
 import com.example.metapolitan.presentation.screens.home.HomeScreen
+import com.example.metapolitan.presentation.screens.movie_details.MovieDetailsScreen
+import com.example.metapolitan.presentation.screens.search.SearchScreen
 import com.example.metapolitan.presentation.theme.MetapolitanTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -69,6 +74,62 @@ fun MetapolitanApp(viewModel: MainViewModel, navController: NavHostController) {
                 .padding(innerPadding)
         ) {
             composable(Screens.HomeScreen.route) { HomeScreen(navController) }
+            composable(
+                Screens.SearchScreen.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300)
+                    )
+                }) {
+                SearchScreen(navController)
+            }
+            composable(
+                Screens.MovieDetailsScreen.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth },
+                        animationSpec = tween(300)
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> fullWidth },
+                        animationSpec = tween(300)
+                    )
+                }) {
+                MovieDetailsScreen(navController)
+            }
         }
     }
 }
