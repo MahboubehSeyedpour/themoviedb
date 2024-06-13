@@ -89,7 +89,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun onMovieClicked() = viewModelScope.launch {
+    fun onMovieClicked(movie: Movie) = viewModelScope.launch {
         _events.emit(HomeEvents.NavigateToMovieDetailsScreen)
     }
 }
