@@ -1,9 +1,18 @@
 package com.example.metapolitan.presentation.screens.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.metapolitan.data.local.Movie
+import com.example.metapolitan.data.remote.ModelState
+import com.example.metapolitan.data.remote.Resource
+import com.example.metapolitan.data.remote.response.MovieResponse
+import com.example.metapolitan.domain.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,13 +20,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(private val movieRepository: MovieRepository) : ViewModel() {
 
     private val _events = MutableSharedFlow<HomeEvents>()
     val events = _events.asSharedFlow()
@@ -37,71 +48,32 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         _isSearchBarVisible.value = !_isSearchBarVisible.value
     }
 
+
+    var startState by mutableStateOf(ModelState<MovieResponse>())
+        private set
+
     init {
         fetchItems()
     }
 
-    private fun fetchItems() {
-        viewModelScope.launch {
-            _items.value = listOf(
-                Movie(
-                    id = "0",
-                    title = "movie 0",
-                    description = "description 0, description 0, description 0, description 0, description 0",
-                    imageUrl = "image 0",
-                    year = "2021",
-                    rating = 1.0f
-                ),
-                Movie(
-                    id = "1",
-                    title = "movie 1",
-                    description = "description 1",
-                    imageUrl = "image 1",
-                    year = "2024",
-                    rating = 2.5f
-                ),
-                Movie(
-                    id = "2",
-                    title = "movie 2",
-                    description = "description 2",
-                    imageUrl = "image 2",
-                    year = "2026",
-                    rating = 4.5f
-                ),
-                Movie(
-                    id = "3",
-                    title = "movie 3",
-                    description = "description 3",
-                    imageUrl = "image 3",
-                    year = "2023",
-                    rating = 4.0f
-                ),
-                Movie(
-                    id = "4",
-                    title = "movie 4",
-                    description = "description 4",
-                    imageUrl = "image 4",
-                    year = "2020",
-                    rating = 3.7f
-                ),
-                Movie(
-                    id = "5",
-                    title = "movie 5",
-                    description = "description 5",
-                    imageUrl = "image 5",
-                    year = "1998",
-                    rating = 5.0f
-                ),
-                Movie(
-                    id = "6",
-                    title = "movie 6",
-                    description = "description 6",
-                    imageUrl = "image 6",
-                    year = "2021",
-                    rating = 5.0f
-                ),
-            )
-        }
+    private fun fetchItems() = viewModelScope.launch(Dispatchers.IO){
+
+        delay(4000)
+        movieRepository.getPopularMovies().onEach { result ->
+            when (result) {
+                is Resource.Error -> {
+                    startState = ModelState(error = result.message ?: "")
+                }
+
+                is Resource.Loading -> {
+                    startState = ModelState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    startState = ModelState(response = result.data)
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onSearchClicked() = viewModelScope.launch {
@@ -113,6 +85,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onChipSelected(chip: String) {
+        fetchItems()
         _selectedChip.value = chip
     }
 }

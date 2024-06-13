@@ -90,7 +90,7 @@ fun MovieDetailsScreen(navController: NavController) {
         ) {
             listOf("Action", "Adventure", "Comedy").forEach { genre ->
                 FilterChips(
-                    modifier = Modifier.padding(end = dimensionResource(id = R.dimen.padding)),
+//                    modifier = Modifier.padding(end = dimensionResource(id = R.dimen.padding)),
                     chipLabel = genre,
                     selected = false,
                     onChipClicked = {}

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -20,11 +23,30 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val localProperties = Properties()
+        localProperties.load(FileInputStream(rootProject.file("local.properties")))
+
+        //return empty key in case something goes wrong
+        val apiKey = localProperties.getProperty("API_KEY") ?: ""
+
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = apiKey
+        )
     }
 
     buildTypes {
+        debug {
+            buildConfigField ("String", "BASE_URL", "\"https://api.themoviedb.org/\"")
+            android.buildFeatures.buildConfig = true
+            isJniDebuggable = true
+            isDebuggable = true
+        }
         release {
-            isMinifyEnabled = false
+            buildConfigField ("String", "BASE_URL", "\"https://api.themoviedb.org/\"")
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -70,6 +92,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Coroutine
+    implementation(libs.kotlinx.coroutines.android)
+    implementation (libs.kotlinx.coroutines.core)
+
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -78,4 +104,9 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation (libs.okhttp)
 }
