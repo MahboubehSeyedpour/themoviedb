@@ -38,4 +38,12 @@ class MovieRepositoryImpl @Inject constructor(
         return response
     }
 
+    override suspend fun getSearchResult(query: String, page: Int): Resource<MovieResponse> {
+        // Make network call or database query
+        Log.d("MovieRepository", "Fetching search result page: $page")
+        val response: Resource<MovieResponse> =
+            apiRequest { apiService.getSearchResult(query, page) }
+        Log.d("MovieRepository", "search result: ${response.data?.results}")
+        return response
+    }
 }

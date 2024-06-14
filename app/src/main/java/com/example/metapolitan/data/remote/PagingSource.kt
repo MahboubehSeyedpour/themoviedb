@@ -41,6 +41,45 @@ abstract class BasePagingSource<T>(
     }
 }
 
+abstract class SearchPagingSource<T>(
+    private val repositoryCall: suspend (String, Int) -> Resource<MovieResponse>,
+    private val query: String
+) : PagingSource<Int, Movie>() {
+
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val closestPage = state.closestPageToPosition(anchorPosition)
+            closestPage?.prevKey?.plus(1) ?: closestPage?.nextKey?.minus(1)
+        }
+    }
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+        return try {
+            val nextPage = params.key ?: 1
+            Log.d("SearchPagingSource", "Loading page: $nextPage with query: $query")
+            val response = repositoryCall(query, nextPage)
+            val totalPages = response.data?.totalPages ?: 0
+            Log.d("SearchPagingSource", "Loaded movies: ${response.data?.results?.size}, Total pages: $totalPages")
+            val data = response.data?.results ?: emptyList()
+
+            LoadResult.Page(
+                data = data,
+                prevKey = if (nextPage == 1) null else nextPage - 1,
+                nextKey = if (nextPage < totalPages) nextPage + 1 else null
+            )
+        } catch (exception: IOException) {
+            Log.e("SearchPagingSource", "IOException: ${exception.localizedMessage}")
+            LoadResult.Error(exception)
+        } catch (exception: HttpException) {
+            Log.e("SearchPagingSource", "HttpException: ${exception.localizedMessage}")
+            LoadResult.Error(exception)
+        }
+    }
+}
+
+
+
+
 // ------- write different paging sources for popular and top rated and ... movies-------
 class PopularMoviesPagingSource(
     movieRepository: MovieRepository
@@ -53,3 +92,8 @@ class TopRatedMoviesPagingSource(
 class UpcomingMoviesPagingSource(
     movieRepository: MovieRepository
 ) : BasePagingSource<Movie>(movieRepository::getUpComingMovies)
+
+class SearchResultPagingSource(
+    movieRepository: MovieRepository,
+    query: String
+) : SearchPagingSource<Movie>(repositoryCall = movieRepository::getSearchResult, query = query)

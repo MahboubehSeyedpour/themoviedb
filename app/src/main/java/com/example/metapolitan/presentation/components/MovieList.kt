@@ -108,22 +108,26 @@ fun MovieCard(movie: Movie, onCardClicked: () -> Unit) {
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Text(
-                    text = "(${movie.releaseDate})",
-                    color = Color.Gray,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                movie.releaseDate?.let {
+                    Text(
+                        text = "(${movie.releaseDate.takeWhile { it != '-' }})",
+                        color = Color.Gray,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
-                RatingStars(rating = movie.voteAverage?.toFloat() ?: 5F)
+                RatingStars(rating = movie.voteAverage?.toFloat() ?: 5f)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = movie.overview ?: "",
-                    color = Color.Gray,
-                    minLines = 3,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
+                movie.overview?.let {
+                    Text(
+                        text = movie.overview,
+                        color = Color.Gray,
+                        minLines = 3,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

@@ -8,4 +8,5 @@ interface MovieRepository {
     suspend fun getPopularMovies(page: Int): Resource<MovieResponse>
     suspend fun getTopRatedMovies(page: Int): Resource<MovieResponse>
     suspend fun getUpComingMovies(page: Int): Resource<MovieResponse>
+    suspend fun getSearchResult(query: String, page: Int): Resource<MovieResponse>
 }
