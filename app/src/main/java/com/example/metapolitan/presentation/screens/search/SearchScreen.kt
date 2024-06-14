@@ -19,12 +19,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
@@ -32,19 +34,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.metapolitan.R
 import com.example.metapolitan.presentation.components.MovieList
+import com.example.metapolitan.presentation.navigations.Screens
 import com.example.metapolitan.presentation.theme.DarkGray
 import com.example.metapolitan.presentation.theme.GunmetalGray
 import com.example.metapolitan.presentation.theme.LightGray
 import com.example.metapolitan.presentation.theme.MetapolitanTheme
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SearchScreen(navController: NavController, viewModel: SearchViewModel = hiltViewModel()) {
 
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    LaunchedEffect("events") {
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            viewModel.events.collectLatest { event ->
+                when (event) {
+                    is SearchEvents.NavigateToMovieDetailsScreen -> navController.navigate(
+                        route = "${Screens.MovieDetailsScreen.route}?interScreenData=${event.interScreenData}"
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier

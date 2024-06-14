@@ -9,7 +9,7 @@ import androidx.paging.cachedIn
 import com.example.metapolitan.data.remote.SearchResultPagingSource
 import com.example.metapolitan.data.remote.response.Movie
 import com.example.metapolitan.domain.repository.MovieRepository
-import com.example.metapolitan.presentation.screens.home.HomeEvents
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private val _events = MutableSharedFlow<HomeEvents>()
+    private val _events = MutableSharedFlow<SearchEvents>()
     val events = _events.asSharedFlow()
 
     private val _searchQuery = MutableStateFlow("")
@@ -55,7 +55,11 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onMovieClicked(movie: Movie) = viewModelScope.launch {
-        _events.emit(HomeEvents.NavigateToMovieDetailsScreen)
+        _events.emit(
+            SearchEvents.NavigateToMovieDetailsScreen(
+                interScreenData = Gson().toJson(movie)
+            )
+        )
     }
 
     fun onQueryClear() {

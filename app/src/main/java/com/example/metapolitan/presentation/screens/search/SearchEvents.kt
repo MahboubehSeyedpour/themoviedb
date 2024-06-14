@@ -1,4 +1,5 @@
 package com.example.metapolitan.presentation.screens.search
 
-class SearchEvents {
+sealed class SearchEvents {
+    data class NavigateToMovieDetailsScreen(val interScreenData: String) : SearchEvents()
 }

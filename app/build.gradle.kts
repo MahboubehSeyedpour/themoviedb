@@ -40,12 +40,14 @@ android {
     buildTypes {
         debug {
             buildConfigField ("String", "BASE_URL", "\"https://api.themoviedb.org/\"")
+            buildConfigField("String", "LARGE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
             android.buildFeatures.buildConfig = true
             isJniDebuggable = true
             isDebuggable = true
         }
         release {
             buildConfigField ("String", "BASE_URL", "\"https://api.themoviedb.org/\"")
+            buildConfigField("String", "LARGE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -113,7 +115,7 @@ dependencies {
     implementation (libs.okhttp)
 
     // coil
-    implementation(libs.coil)
+    implementation (libs.coil.compose)
 
     // Paging
     implementation (libs.androidx.paging.runtime.ktx)

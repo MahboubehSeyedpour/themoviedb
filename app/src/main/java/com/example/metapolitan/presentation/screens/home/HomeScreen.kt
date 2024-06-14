@@ -50,8 +50,11 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
         lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
             viewModel.events.collectLatest { event ->
                 when (event) {
-                    HomeEvents.NavigateToMovieDetailsScreen -> navController.navigate(Screens.MovieDetailsScreen.route)
-                    HomeEvents.avigateToSearchScreen -> navController.navigate(Screens.SearchScreen.route)
+                    is HomeEvents.NavigateToMovieDetailsScreen -> navController.navigate(
+                        route = "${Screens.MovieDetailsScreen.route}?interScreenData=${event.interScreenData}"
+                    )
+
+                    HomeEvents.NavigateToSearchScreen -> navController.navigate(Screens.SearchScreen.route)
                 }
             }
         }
@@ -66,17 +69,16 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
             modifier = Modifier
                 .weight(0.25f)
                 .background(GunmetalGray)
-                .padding(dimensionResource(id = R.dimen.padding)),
-            viewModel = viewModel
+                .padding(dimensionResource(id = R.dimen.padding)), viewModel = viewModel
         )
 
-        MovieList(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
+
+        MovieList(modifier = Modifier
+            .weight(1f)
+            .fillMaxSize(),
             movies = viewModel.moviesFlow.collectAsLazyPagingItems(),
-            onMovieClicked = { movie -> viewModel.onMovieClicked() }
-        )
+            onMovieClicked = { movie -> viewModel.onMovieClicked(movie) })
+
     }
 }
 

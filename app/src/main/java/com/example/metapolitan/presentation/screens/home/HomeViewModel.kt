@@ -1,5 +1,6 @@
 package com.example.metapolitan.presentation.screens.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -11,19 +12,20 @@ import com.example.metapolitan.data.remote.TopRatedMoviesPagingSource
 import com.example.metapolitan.data.remote.UpcomingMoviesPagingSource
 import com.example.metapolitan.data.remote.response.Movie
 import com.example.metapolitan.domain.repository.MovieRepository
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
@@ -59,11 +61,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSearchClicked() = viewModelScope.launch {
-        _events.emit(HomeEvents.avigateToSearchScreen)
+        _events.emit(HomeEvents.NavigateToSearchScreen)
     }
 
-    fun onMovieClicked() = viewModelScope.launch {
-        _events.emit(HomeEvents.NavigateToMovieDetailsScreen)
+    fun onMovieClicked(movie: Movie) = viewModelScope.launch {
+        _events.emit(
+            HomeEvents.NavigateToMovieDetailsScreen(
+                interScreenData = Gson().toJson(movie)
+            )
+        )
     }
 
     fun onChipSelected(chip: String) {

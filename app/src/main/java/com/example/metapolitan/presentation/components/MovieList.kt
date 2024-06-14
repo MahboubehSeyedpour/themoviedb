@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +28,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.metapolitan.BuildConfig
 import com.example.metapolitan.R
 import com.example.metapolitan.data.remote.response.Movie
 import com.example.metapolitan.presentation.theme.GunmetalGray
@@ -46,7 +52,7 @@ fun MovieList(modifier: Modifier, movies: LazyPagingItems<Movie>, onMovieClicked
             val movie = movies[index]
             movie?.let {
                 MovieCard(movie = movie,
-                    onCardClicked = {})
+                    onCardClicked = { onMovieClicked(movie)})
             }
         }
 
@@ -76,6 +82,7 @@ fun MovieList(modifier: Modifier, movies: LazyPagingItems<Movie>, onMovieClicked
 
 @Composable
 fun MovieCard(movie: Movie, onCardClicked: () -> Unit) {
+    val rate = movie.voteAverage?.times(5)?.div(10)
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
@@ -89,8 +96,11 @@ fun MovieCard(movie: Movie, onCardClicked: () -> Unit) {
         )
     ) {
         Column {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(BuildConfig.LARGE_IMAGE_URL + movie.backdropPath)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -117,7 +127,7 @@ fun MovieCard(movie: Movie, onCardClicked: () -> Unit) {
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                RatingStars(rating = movie.voteAverage?.toFloat() ?: 5f)
+                RatingStars(rating = rate?.toFloat() ?: 5f)
                 Spacer(modifier = Modifier.height(8.dp))
                 movie.overview?.let {
                     Text(
