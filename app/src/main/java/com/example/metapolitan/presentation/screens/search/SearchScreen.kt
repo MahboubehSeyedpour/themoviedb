@@ -39,7 +39,7 @@ import com.example.metapolitan.presentation.theme.MetapolitanTheme
 @Composable
 fun SearchScreen(navController: NavController, viewModel: SearchViewModel = hiltViewModel()) {
 
-    val items by viewModel.items.collectAsState()
+//    val items by viewModel.items.collectAsState()
 
     Column(
         modifier = Modifier
@@ -54,13 +54,13 @@ fun SearchScreen(navController: NavController, viewModel: SearchViewModel = hilt
                 .padding(dimensionResource(id = R.dimen.padding))
         )
 
-        MovieList(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
-            items = items,
-            onMovieClicked = { movie -> viewModel.onMovieClicked(movie) }
-        )
+//        MovieList(
+//            modifier = Modifier
+//                .weight(1f)
+//                .fillMaxSize(),
+//            movies = items,
+//            onMovieClicked = { movie -> viewModel.onMovieClicked(movie) }
+//        )
     }
 }
 

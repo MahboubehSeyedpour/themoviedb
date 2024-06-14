@@ -5,5 +5,5 @@ import com.example.metapolitan.data.remote.response.MovieResponse
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    fun getPopularMovies(): Flow<Resource<MovieResponse>>
+    suspend fun getPopularMovies(page: Int): Resource<MovieResponse>
 }

@@ -2,13 +2,13 @@ package com.example.metapolitan.di
 
 import com.example.metapolitan.BuildConfig
 import com.example.metapolitan.data.remote.ApiService
-import com.example.metapolitan.data.remote.HeaderInterceptor
-import com.example.metapolitan.data.remote.NetworkConnectionInterceptor
+import com.example.metapolitan.data.remote.RequestBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Dispatcher
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -40,14 +40,23 @@ object NetworkModule {
     @Provides
     fun provideHttpClient(
         logging: HttpLoggingInterceptor,
-        headerInterceptor: HeaderInterceptor,
-        networkConnectionInterceptor: NetworkConnectionInterceptor,
         dispatcher: Dispatcher
     ) =
         OkHttpClient.Builder()
             .addInterceptor(logging)
-            .addInterceptor(networkConnectionInterceptor)
-            .addInterceptor(headerInterceptor)
+            .addInterceptor(
+                Interceptor {chain ->
+                    val requestBuilder = chain.request().newBuilder()
+
+                    requestBuilder.apply {
+                        addHeader("Accept", "application/json")
+                        addHeader("Content-Type", "application/json;charset=utf-8")
+                        addHeader("Authorization", "Bearer ${BuildConfig.API_KEY}")
+                    }
+
+                    chain.proceed(requestBuilder.build())
+                }
+            )
             .connectTimeout(30, TimeUnit.SECONDS) // connect timeout
             .writeTimeout(30, TimeUnit.SECONDS) // write timeout
             .readTimeout(30, TimeUnit.SECONDS) // read timeout
@@ -64,4 +73,9 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
+
+    @Provides
+    fun provideRequestBuilder(): RequestBuilder {
+        return object : RequestBuilder() {}
+    }
 }

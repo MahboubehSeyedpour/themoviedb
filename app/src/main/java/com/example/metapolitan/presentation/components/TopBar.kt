@@ -1,6 +1,5 @@
-package com.example.metapolitan.presentation.screens.home.components
+package com.example.metapolitan.presentation.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import com.example.metapolitan.R
 
@@ -35,7 +33,7 @@ fun TopBar(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
         )
-        if(icon == null) return
+        if (icon == null) return
         IconButton(
             onClick = onSearchClick,
             modifier = Modifier.align(Alignment.CenterVertically)

@@ -1,8 +1,10 @@
 package com.example.metapolitan.data.remote.response
 
+import com.google.gson.annotations.SerializedName
+
 data class MovieResponse(
     val page: Int,
-    val movies: List<MovieDto>,
-    val totalPages: Int,
-    val totalResults: Int
+    val results: List<Movie>,
+    @SerializedName("total_pages") val totalPages: Int,
+    @SerializedName("total_results")  val totalResults: Int
 )

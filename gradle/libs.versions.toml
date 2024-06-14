@@ -14,6 +14,7 @@ hiltdVersion = "2.50"
 hiltNavigationCompose = "1.2.0"
 
 # NAvigation
+lifecycleViewmodelCompose = "2.8.2"
 navigationCompose = "2.7.7"
 material = "1.12.0"
 
@@ -27,8 +28,17 @@ kotlinxCoroutinesCore = "1.8.0"
 # Coroutine
 kotlinxCoroutinesAndroid = "1.8.0"
 
+# Coil
+coil = "2.6.0"
+
+# Paging
+pagingCompose = "3.3.0"
+pagingRuntimeKtx = "3.3.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleViewmodelCompose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -61,6 +71,13 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 
 # Coroutine
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+
+# Coil
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+
+# Paging
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
