@@ -12,4 +12,16 @@ interface ApiService {
         @Query("page") page: Int
     ): Response<MovieResponse>
 
+    @GET("/3/movie/top_rated")
+    suspend fun getTopRatedMovies(
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
+    @GET("/3/movie/upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
 }

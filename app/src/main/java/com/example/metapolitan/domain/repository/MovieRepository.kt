@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     suspend fun getPopularMovies(page: Int): Resource<MovieResponse>
+    suspend fun getTopRatedMovies(page: Int): Resource<MovieResponse>
+    suspend fun getUpComingMovies(page: Int): Resource<MovieResponse>
 }

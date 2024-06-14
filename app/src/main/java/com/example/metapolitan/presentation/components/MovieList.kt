@@ -24,16 +24,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.example.metapolitan.R
 import com.example.metapolitan.data.remote.response.Movie
-import com.example.metapolitan.presentation.screens.home.HomeViewModel
 import com.example.metapolitan.presentation.theme.GunmetalGray
 
 @Composable
-fun MovieList(modifier: Modifier, viewModel: HomeViewModel, onMovieClicked: (Movie) -> Unit) {
-
-    val movieFlow = viewModel.movieFlow.collectAsLazyPagingItems()
+fun MovieList(modifier: Modifier, movies: LazyPagingItems<Movie>, onMovieClicked: (Movie) -> Unit) {
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -45,15 +42,15 @@ fun MovieList(modifier: Modifier, viewModel: HomeViewModel, onMovieClicked: (Mov
         ),
         modifier = modifier,
     ) {
-        items(movieFlow.itemCount) { index ->
-            val movie = movieFlow[index]
+        items(movies.itemCount) { index ->
+            val movie = movies[index]
             movie?.let {
                 MovieCard(movie = movie,
                     onCardClicked = {})
             }
         }
 
-        movieFlow.apply {
+        movies.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
                     item { Text("Loading...") }

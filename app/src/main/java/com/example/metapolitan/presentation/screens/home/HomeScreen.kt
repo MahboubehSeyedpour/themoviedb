@@ -31,8 +31,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.metapolitan.R
 import com.example.metapolitan.presentation.components.FilterChips
 import com.example.metapolitan.presentation.components.MovieList
-import com.example.metapolitan.presentation.navigations.Screens
 import com.example.metapolitan.presentation.components.TopBar
+import com.example.metapolitan.presentation.navigations.Screens
 import com.example.metapolitan.presentation.theme.BattleshipGray
 import com.example.metapolitan.presentation.theme.DarkGray
 import com.example.metapolitan.presentation.theme.Green
@@ -74,7 +74,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize(),
-            viewModel = viewModel,
+            movies = viewModel.moviesFlow.collectAsLazyPagingItems(),
             onMovieClicked = { movie -> viewModel.onMovieClicked() }
         )
     }
