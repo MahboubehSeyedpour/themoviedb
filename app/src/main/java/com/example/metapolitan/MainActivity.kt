@@ -5,7 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
@@ -77,55 +83,48 @@ fun MetapolitanApp(viewModel: MainViewModel, navController: NavHostController) {
             composable(
                 Screens.SearchScreen.route,
                 enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300)
+                    expandHorizontally(
+                        animationSpec = tween(700)
                     )
                 },
                 exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300)
+                    scaleOut (
+                        animationSpec = tween(700)
                     )
                 },
                 popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300)
+                    expandHorizontally(
+                        animationSpec = tween(700)
                     )
                 },
                 popExitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300)
+                    scaleOut(
+                        animationSpec = tween(700)
                     )
-                }) {
+                }
+            ) {
                 SearchScreen(navController)
             }
             composable(
                 Screens.MovieDetailsScreen.route,
                 enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300)
+                    expandHorizontally(
+                        animationSpec = tween(700)
                     )
                 },
                 exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300)
+                    scaleOut (
+                        animationSpec = tween(700)
                     )
                 },
                 popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> -fullWidth },
-                        animationSpec = tween(300)
+                    expandHorizontally(
+                        animationSpec = tween(700)
                     )
                 },
                 popExitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> fullWidth },
-                        animationSpec = tween(300)
+                    scaleOut(
+                        animationSpec = tween(700)
                     )
                 }) {
                 MovieDetailsScreen(navController)
